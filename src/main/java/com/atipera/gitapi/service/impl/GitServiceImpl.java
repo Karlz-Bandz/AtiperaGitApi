@@ -60,10 +60,10 @@ public class GitServiceImpl implements GitService {
     private Mono<? extends Throwable> handle4xxError(ClientResponse response) {
         if(response.statusCode() == HttpStatus.NOT_FOUND) {
             return response.bodyToMono(String.class)
-                    .flatMap(errorMessage -> Mono.error(new GitNotFoundException(errorMessage)));
+                    .flatMap(errorMessage -> Mono.error(new GitNotFoundException("Git user not found!")));
         }else if(response.statusCode() == HttpStatus.UNAUTHORIZED) {
             return response.bodyToMono(String.class)
-                    .flatMap(errorMessage -> Mono.error(new GitUnauthorizedException(errorMessage)));
+                    .flatMap(errorMessage -> Mono.error(new GitUnauthorizedException("You are unauthorized!")));
         }
 
         return response.createException().flatMap(Mono::error);
